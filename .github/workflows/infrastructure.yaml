@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "infrastructure/**"
+      - ".github/workflows/infrastructure.yaml"
 
 jobs:
   deploy-dev:
