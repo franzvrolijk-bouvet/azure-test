@@ -24,8 +24,8 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
     name: appServicePlanName
     location: location
     sku: {
-        name: 'Y1'
-        tier: 'Dynamic'
+        name: 'F1'
+        tier: 'Free'
     }
     properties: {}
 }
@@ -46,7 +46,6 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
         type: 'SystemAssigned'
     }
     properties: {
-        serverFarmId: appServicePlan.id
         siteConfig: {
             appSettings: [
                 {
