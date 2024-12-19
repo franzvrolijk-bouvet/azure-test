@@ -32,7 +32,7 @@ jobs:
             az deployment group create \
               --resource-group rg-azure-test-dev \
               --template-file infrastructure/main.bicep \
-              --parameters @infrastructure/parameters-dev.json
+              --parameters @infrastructure/params-dev.json
 
   deploy-prod:
     name: Deploy to Prod
@@ -62,4 +62,4 @@ jobs:
             az deployment group create \
               --resource-group rg-azure-test-prod \
               --template-file infrastructure/main.bicep \
-              --parameters @infrastructure/parameters-prod.json
+              --parameters @infrastructure/params-prod.json
