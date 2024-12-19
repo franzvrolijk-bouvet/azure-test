@@ -2,9 +2,7 @@ name: Deploy Infrastructure
 
 on:
   push:
-    paths:
-      - "infrastructure/**"
-      - ".github/workflows/infrastructure.yaml"
+    branches: [main]
 
 jobs:
   deploy-dev:
