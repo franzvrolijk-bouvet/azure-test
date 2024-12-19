@@ -1,5 +1,11 @@
 {
     "storageAccountName": {
-        "value": "bouvetkodalprod"
+        "value": "bouvetkodalprodstorage"
+    },
+    "appServicePlanName": {
+        "value": "bouvetkodalprodplan"
+    },
+    "appServiceName": {
+        "value": "bouvetkodalprodapp"
     }
 }
