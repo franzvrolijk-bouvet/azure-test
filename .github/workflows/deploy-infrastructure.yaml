@@ -6,6 +6,10 @@ on:
       - "infrastructure/**"
       - ".github/**"
 
+concurrency:
+  group: deploy-infrastructure
+  cancel-in-progress: true
+
 permissions:
   id-token: write
   contents: read

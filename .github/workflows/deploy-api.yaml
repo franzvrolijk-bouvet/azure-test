@@ -1,10 +1,14 @@
-name: Deploy API to Azure App Service
+name: deploy-api
 
 on:
   push:
     branches: [main]
     paths:
       - "api/**"
+
+concurrency:
+  group: deploy-api
+  cancel-in-progress: true
 
 permissions:
   id-token: write
