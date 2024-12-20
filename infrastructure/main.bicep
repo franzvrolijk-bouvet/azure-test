@@ -27,16 +27,27 @@ resource keyVault 'Microsoft.KeyVault/vaults@2018-02-14' = {
       family: 'A'
       name: 'standard'
     }
-    accessPolicies: [{
-      tenantId: subscription().tenantId
-      objectId: appService.identity.principalId
-      permissions: {
-        secrets: [
-          'get'
-          'list'
-        ]
+  }
+}
+
+resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2018-02-14' = {
+  parent: keyVault
+  name: 'add'
+  properties: {
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: appService.identity.principalId
+        permissions: {
+          keys: [
+            'get'
+          ]
+          secrets: [
+            'get'
+          ]
+        }
       }
-    }]
+    ]
   }
 }
 
