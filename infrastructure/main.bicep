@@ -1,13 +1,11 @@
 @minLength(3)
-@maxLength(24)
-param storageAccountName string
-param appServicePlanName string
-param appServiceName string
+@maxLength(6)
+param env string
 
 param location string = resourceGroup().location
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
-    name: storageAccountName
+    name: '${env}storage'
     location: location
     sku: {
         name: 'Standard_LRS'
@@ -20,8 +18,30 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     }
 }
 
+resource keyVault 'Microsoft.KeyVault/vaults@2018-02-14' = {
+  name: '${env}-keyvault'
+  location: location
+  properties: {
+    tenantId: subscription().tenantId
+    sku: {
+      family: 'A'
+      name: 'standard'
+    }
+    accessPolicies: [{
+      tenantId: subscription().tenantId
+      objectId: appService.identity.principalId
+      permissions: {
+        secrets: [
+          'get'
+          'list'
+        ]
+      }
+    }]
+  }
+}
+
 resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
-    name: appServicePlanName
+    name: '${env}-appServicePlan'
     location: location
     sku: {
         name: 'F1'
@@ -31,15 +51,18 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
 }
 
 resource appService 'Microsoft.Web/sites@2024-04-01' = {
-    name: appServiceName
+    name: '${env}-appService'
     location: location
     properties: {
         serverFarmId: appServicePlan.id
     }
+    identity: {
+        type: 'SystemAssigned'
+    }
 }
 
 resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
-    name: '${appServiceName}-functionApp'
+    name: '${env}-functionApp'
     location: location
     kind: 'functionapp'
     identity: {
@@ -54,7 +77,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
                 }
                 {
                     name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-                    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+                    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
                 }
                 {
                     name: 'FUNCTIONS_WORKER_RUNTIME'
@@ -67,7 +90,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
 }
 
 resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
-    name: '${storageAccountName}-cosmosdb'
+    name: '${env}dbAccount'
     location: location
     properties: {
       enableFreeTier: true
@@ -98,7 +121,7 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
   
   resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
     parent: database
-    name: 'dbContainer'
+    name: 'container'
     properties: {
       resource: {
         id: 'dbContainer'
