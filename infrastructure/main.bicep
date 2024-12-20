@@ -61,6 +61,16 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
     }
 }
 
+resource functionPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
+    name: '${env}-functionPlan'
+    location: location
+    sku: {
+        name: 'Y1'
+        tier: 'Dynamic'
+    }
+    properties: {}
+}
+
 resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
     name: '${env}-functionApp'
     location: location
@@ -69,6 +79,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
         type: 'SystemAssigned'
     }
     properties: {
+        serverFarmId: functionPlan.id
         siteConfig: {
             appSettings: [
                 {
