@@ -6,6 +6,8 @@ using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddApplicationInsightsTelemetry();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -23,23 +25,32 @@ app.MapPost("upload", async (string value, IConfiguration config) =>
     await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes(value)), false);
 });
 
-app.MapGet("list", async (IConfiguration config) =>
+app.MapGet("list", async (IConfiguration config, ILogger logger) =>
 {
+    logger.LogInformation("Getting items from Cosmos DB");
+    
     var cosmosConnectionString = config["CosmosConnectionString"] ?? throw new ApplicationException("CosmosConnectionString missing");
-
+    logger.LogInformation($"Cosmos Connection String: {cosmosConnectionString[0..10]}...");
+    
     var cosmosClient = new CosmosClient(accountEndpoint: cosmosConnectionString, tokenCredential: new DefaultAzureCredential());
     var db = cosmosClient.GetDatabase("db");
+
     var container = db.GetContainer("container");
-    // Read all items from Cosmos DB
+    logger.LogInformation($"Container: {container.Id}");
+
     var query = container.GetItemQueryIterator<dynamic>("SELECT * FROM c");
     var items = new List<dynamic>();
     
     while (query.HasMoreResults)
     {
         var response = await query.ReadNextAsync();
+        logger.LogInformation("Reading next batch with length {0}", response.Count);
+        
         items.AddRange(response);
     }
     
+    logger.LogInformation("Items retrieved: {0}", items.Count);
+
     return items;
 });
 
