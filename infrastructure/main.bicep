@@ -155,6 +155,7 @@ resource cosmosDbSqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRol
   properties: {
     roleDefinitionId: cosmosDbSqlRoleDefinition.id
     principalId: appService.identity.principalId
+    scope: dbAccount.id
   }
 }
   
