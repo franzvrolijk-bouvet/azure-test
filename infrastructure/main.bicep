@@ -128,20 +128,6 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
       ]
     }
   }
-
-  resource cosmosRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
-    name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
-    scope: subscription()
-  }
-
-  resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-    name: '${env}-cosmos-role-assignment'
-    properties: {
-      principalId: appService.identity.principalId
-      roleDefinitionId: cosmosRoleDefinition.id
-    }
-    scope: dbAccount
-  }
   
   resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
     parent: dbAccount

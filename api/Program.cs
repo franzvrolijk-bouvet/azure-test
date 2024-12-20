@@ -33,11 +33,13 @@ app.MapGet("list", async (IConfiguration config) =>
     // Read all items from Cosmos DB
     var query = container.GetItemQueryIterator<dynamic>("SELECT * FROM c");
     var items = new List<dynamic>();
+    
     while (query.HasMoreResults)
     {
         var response = await query.ReadNextAsync();
         items.AddRange(response);
     }
+    
     return items;
 });
 
