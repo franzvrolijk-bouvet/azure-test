@@ -131,7 +131,7 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
 
   
 resource cosmosDbSqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2024-11-15' = {
-  name: '${env}-CosmosDBAccountReaderRole'
+  name: guid(dbAccount.id, 'CosmosDBAccountReaderRole')
   parent: dbAccount
   properties: {
     roleName: 'CosmosDBAccountReaderRole'
@@ -150,7 +150,7 @@ resource cosmosDbSqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRol
 }
 
 resource cosmosDbSqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-11-15' = {
-  name: '${env}-CosmosDBAccountReaderRoleAssignment'
+  name: guid(dbAccount.id, appService.id, 'CosmosDBAccountReaderRoleAssignment')
   parent: dbAccount
   properties: {
     roleDefinitionId: cosmosDbSqlRoleDefinition.id
