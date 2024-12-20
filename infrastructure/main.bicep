@@ -142,7 +142,7 @@ resource cosmosDbSqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRol
     permissions: [
       {
         dataActions: [
-          'Microsoft.DocumentDB/databaseAccounts/read'
+          'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read'
         ]
       }
     ]
