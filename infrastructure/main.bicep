@@ -90,7 +90,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
 }
 
 resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
-    name: '${env}dbAccount'
+    name: '${env}dbaccount'
     location: location
     properties: {
       enableFreeTier: true
