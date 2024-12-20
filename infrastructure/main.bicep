@@ -1,5 +1,5 @@
 @minLength(3)
-@maxLength(6)
+@maxLength(10)
 param env string
 
 param location string = resourceGroup().location
