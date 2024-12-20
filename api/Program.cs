@@ -2,23 +2,20 @@ using System.Text;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApplicationInsightsTelemetry(c => {
-    c.ConnectionString = "InstrumentationKey=8ca27c43-c3bf-4ca4-ba86-ea582a062804;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/;ApplicationId=f18c8067-2223-478b-bc88-2edcdbd8a50e";
+builder.Services.AddLogging(b => {
+    b.AddConsole();
 });
-
-builder.Logging.AddApplicationInsights();
-builder.Logging.AddConsole();
-builder.Logging.AddDebug();
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.MapPost("upload", async (string value, IConfiguration config, ILogger logger) =>
+app.MapPost("upload", async ([FromQuery]string value, IConfiguration config, ILogger<Program> logger) =>
 {
     try 
     {
@@ -41,7 +38,7 @@ app.MapPost("upload", async (string value, IConfiguration config, ILogger logger
     }
 });
 
-app.MapGet("list", async (IConfiguration config, ILogger logger) =>
+app.MapGet("list", async (IConfiguration config, ILogger<Program> logger) =>
 {
     try 
     {
