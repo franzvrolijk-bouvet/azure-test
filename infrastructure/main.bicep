@@ -129,8 +129,9 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
     }
   }
 
-  resource cosmosRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
-    name: 'CosmosDB Built-in Data Contributor'
+  resource cosmosRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+    name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'
+    scope: subscription()
   }
 
   resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
