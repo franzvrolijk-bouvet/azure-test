@@ -124,7 +124,7 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
     name: 'container'
     properties: {
       resource: {
-        id: 'dbContainer'
+        id: 'container'
         partitionKey: {
           paths: [
             '/id'
