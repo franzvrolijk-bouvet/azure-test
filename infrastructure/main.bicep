@@ -128,6 +128,19 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
       ]
     }
   }
+
+  resource cosmosRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' = {
+    name: 'CosmosDB Built-in Data Contributor'
+  }
+
+  resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+    name: '${env}-cosmos-role-assignment'
+    properties: {
+      principalId: appService.identity.principalId
+      roleDefinitionId: cosmosRoleDefinition.id
+    }
+    scope: dbAccount
+  }
   
   resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
     parent: dbAccount
