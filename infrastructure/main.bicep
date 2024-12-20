@@ -128,6 +128,35 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
       ]
     }
   }
+
+  
+resource cosmosDbSqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2024-11-15' = {
+  name: '${env}-CosmosDBAccountReaderRole'
+  parent: dbAccount
+  properties: {
+    roleName: 'CosmosDBAccountReaderRole'
+    type: 'CustomRole'
+    assignableScopes: [
+      dbAccount.id
+    ]
+    permissions: [
+      {
+        dataActions: [
+          'Microsoft.DocumentDB/databaseAccounts/read'
+        ]
+      }
+    ]
+  }
+}
+
+resource cosmosDbSqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-11-15' = {
+  name: '${env}-CosmosDBAccountReaderRoleAssignment'
+  parent: dbAccount
+  properties: {
+    roleDefinitionId: cosmosDbSqlRoleDefinition.id
+    principalId: appService.identity.principalId
+  }
+}
   
   resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
     parent: dbAccount
