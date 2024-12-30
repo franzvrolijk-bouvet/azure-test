@@ -129,35 +129,15 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
     }
   }
 
-  
-resource cosmosDbSqlRoleDefinition 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2024-11-15' = {
-  name: guid(dbAccount.id, 'CosmosDBAccountReaderRole')
-  parent: dbAccount
-  properties: {
-    roleName: 'CosmosDBAccountReaderRole'
-    type: 'CustomRole'
-    assignableScopes: [
-      dbAccount.id
-    ]
-    permissions: [
-      {
-        dataActions: [
-          'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read'
-        ]
-      }
-    ]
+  resource cosmosDBRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2023-11-15' = {
+    name: 'cosmosDBRoleAssignment'
+    parent: dbAccount
+    properties: {
+      principalId: appService.identity.principalId
+      roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'fbdf93bf-df7d-467e-a4d2-9458aa1360c8')
+      scope: dbAccount.id
+    }
   }
-}
-
-resource cosmosDbSqlRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-11-15' = {
-  name: guid(dbAccount.id, appService.id, 'CosmosDBAccountReaderRoleAssignment')
-  parent: dbAccount
-  properties: {
-    roleDefinitionId: cosmosDbSqlRoleDefinition.id
-    principalId: appService.identity.principalId
-    scope: dbAccount.id
-  }
-}
   
   resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
     parent: dbAccount
