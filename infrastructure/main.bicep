@@ -129,8 +129,8 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
     }
   }
 
-  resource cosmosDBRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2023-11-15' = {
-    name: 'cosmosDBRoleAssignment'
+  resource appServiceCosmosRoleAssignment 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2023-11-15' = {
+    name: guid('appServiceCosmosRoleAssignment')
     parent: dbAccount
     properties: {
       principalId: appService.identity.principalId
