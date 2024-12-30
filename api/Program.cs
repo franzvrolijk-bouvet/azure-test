@@ -1,8 +1,10 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Azure.Cosmos;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,9 +13,22 @@ builder.Services.AddLogging(b => {
     b.AddConsole();
 });
 
+builder.Services.AddRateLimiter(o =>
+{
+    o.AddFixedWindowLimiter(policyName: "fixed", options =>
+    {
+        options.PermitLimit = 1;
+        options.QueueLimit = 1;
+        options.Window = TimeSpan.FromSeconds(5);
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+});
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
+
+app.UseRateLimiter();
 
 app.MapPost("upload", async ([FromQuery]string value, IConfiguration config, ILogger<Program> logger) =>
 {
