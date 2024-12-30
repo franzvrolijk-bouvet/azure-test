@@ -134,7 +134,7 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
     parent: dbAccount
     properties: {
       principalId: appService.identity.principalId
-      roleDefinitionId: subscriptionResourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', 'fbdf93bf-df7d-467e-a4d2-9458aa1360c8')
+      roleDefinitionId: subscriptionResourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', dbAccount.name, 'fbdf93bf-df7d-467e-a4d2-9458aa1360c8')
       scope: dbAccount.id
     }
   }
