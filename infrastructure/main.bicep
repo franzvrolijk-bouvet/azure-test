@@ -48,6 +48,18 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2018-02-
           ]
         }
       }
+      {
+        tenantId: subscription().tenantId
+        objectId: '51c3e825-55b6-4e8e-ae26-16073ca1de98'
+        permissions: {
+          keys: [
+            'get'
+          ]
+          secrets: [
+            'get'
+          ]
+        }
+      }
     ]
   }
 }
