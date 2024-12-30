@@ -54,9 +54,11 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2018-02-
         permissions: {
           keys: [
             'get'
+            'list'
           ]
           secrets: [
             'get'
+            'list'
           ]
         }
       }
