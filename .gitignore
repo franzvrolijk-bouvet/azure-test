@@ -2,3 +2,8 @@ sp.txt
 api/bin
 api/obj
 api/.vs
+
+*/node_modules
+*/local.settings.json
+*/.vs
+*/.vscode
