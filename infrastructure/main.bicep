@@ -78,6 +78,22 @@ resource keyVaultAccessPolicy 'Microsoft.KeyVault/vaults/accessPolicies@2018-02-
   }
 }
 
+resource storageAccountConnectionString 'Microsoft.KeyVault/vaults/secrets@2018-02-14' = {
+  parent: keyVault
+  name: 'StorageAccountConnectionString'
+  properties: {
+    value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount.listKeys().keys[0].value}'
+  }
+}
+
+resource cosmosDbConnectionString 'Microsoft.KeyVault/vaults/secrets@2018-02-14' = {
+  parent: keyVault
+  name: 'CosmosDbConnectionString'
+  properties: {
+    value: 'AccountEndpoint=${dbAccount.properties.documentEndpoint};AccountKey=${dbAccount.listKeys().primaryMasterKey}'
+  }
+}
+
 resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
     name: '${env}-appServicePlan'
     location: location
