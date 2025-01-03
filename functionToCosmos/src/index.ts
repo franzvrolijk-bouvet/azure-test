@@ -2,12 +2,16 @@ import { AzureFunction, Context } from "@azure/functions";
 import { CosmosClient } from "@azure/cosmos";
 
 const queueTrigger: AzureFunction = async function (context: Context, myQueueItem: any): Promise<void> {
-  const endpoint = process.env.COSMOS_DB_ENDPOINT;
-  const key = process.env.COSMOS_DB_KEY;
-  const databaseId = process.env.COSMOS_DB_DATABASE_ID;
-  const containerId = process.env.COSMOS_DB_CONTAINER_ID;
+  const databaseId = "db";
+  const containerId = "container";
 
-  const client = new CosmosClient({ endpoint, key });
+  const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
+  if (!connectionString) {
+    context.log("Cosmos DB connection string is not defined in environment variables.");
+    return;
+  }
+
+  const client = new CosmosClient(connectionString);
   const database = client.database(databaseId);
   const container = database.container(containerId);
 

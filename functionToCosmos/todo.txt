@@ -1,4 +1,0 @@
-1. place variables in key vault
-2. change code to read from key vault
-3. make sure infrastructure deployment script creates neccessary resources (probably already done)
-4. create github actions deployment script to deploy function app
