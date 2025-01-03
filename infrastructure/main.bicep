@@ -115,6 +115,14 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
     }
 }
 
+resource appServiceConfig 'Microsoft.Web/sites/config@2024-04-01' = {
+    parent: appService
+    name: 'appsettings'
+    properties: {
+      KeyVaultUri: keyVault.properties.vaultUri
+    }
+}
+
 resource functionPlan 'Microsoft.Web/serverfarms@2024-04-01' = {
     name: '${env}-functionPlan'
     location: location
