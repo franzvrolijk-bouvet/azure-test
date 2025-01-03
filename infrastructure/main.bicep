@@ -154,7 +154,6 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
     name: '${env}dbaccount'
     location: location
     properties: {
-      enableFreeTier: true
       databaseAccountOfferType: 'Standard'
       consistencyPolicy: {
         defaultConsistencyLevel: 'Session'
