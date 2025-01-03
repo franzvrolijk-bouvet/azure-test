@@ -3,12 +3,14 @@ import { CosmosClient } from "@azure/cosmos";
 import { randomUUID } from "crypto";
 
 export async function queueToCosmos(queueItem: unknown, context: InvocationContext): Promise<void> {
+  console.log("Received queue item: ", queueItem);
+  context.log("Received queue item: ", queueItem);
   const dbName = "db";
   const containerName = "container";
 
   const connectionString = process.env.CosmosDbConnectionString;
   if (!connectionString) {
-    context.log("Cosmos DB connection string is not defined in environment variables.");
+    console.log("Cosmos DB connection string is not defined in environment variables.");
     return;
   }
 
@@ -18,9 +20,9 @@ export async function queueToCosmos(queueItem: unknown, context: InvocationConte
 
   try {
     const { resource: createdItem } = await container.items.create({ id: randomUUID(), data: queueItem });
-    context.log(`Created item with id: ${createdItem.id}`);
+    console.log(`Created item with id: ${createdItem.id}`);
   } catch (error) {
-    context.log(`Error creating item: ${error}`);
+    console.log(`Error creating item: ${error}`);
   }
 }
 

@@ -133,6 +133,10 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
                     value: 'node'
                 }
                 {
+                  name: 'WEBSITE_NODE_DEFAULT_VERSION'
+                  value: '~20'
+                }
+                {
                   name: 'CosmosDbConnectionString'
                   value: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/CosmosDbConnectionString)'
                 }
