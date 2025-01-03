@@ -122,7 +122,7 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
             appSettings: [
                 {
                     name: 'AzureWebJobsStorage'
-                    value: storageAccount.properties.primaryEndpoints.blob
+                    value: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/StorageAccountConnectionString)'
                 }
                 {
                     name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
