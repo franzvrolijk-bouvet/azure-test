@@ -1,3 +1,5 @@
+namespace api;
+
 public class RateLimitingMiddleware(RequestDelegate next)
 {
     private static DateTime _lastRequestTime = DateTime.MinValue;

@@ -59,8 +59,8 @@ app.MapGet("list", async (CosmosClient cosmosClient, ILogger<Program> logger) =>
 
         var container = db.GetContainer("container");
 
-        var query = container.GetItemQueryIterator<dynamic>("SELECT * FROM c");
-        var items = new List<dynamic>();
+        var query = container.GetItemQueryIterator<Model>("SELECT * FROM c");
+        var items = new List<Model>();
         
         while (query.HasMoreResults)
         {
