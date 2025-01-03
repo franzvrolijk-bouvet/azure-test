@@ -132,6 +132,14 @@ resource functionApp 'Microsoft.Web/sites@2024-04-01' = {
                     name: 'FUNCTIONS_WORKER_RUNTIME'
                     value: 'node'
                 }
+                {
+                  name: 'CosmosDbConnectionString'
+                  value: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/CosmosDbConnectionString)'
+                }
+                {
+                  name: 'StorageAccountConnectionString'
+                  value: '@Microsoft.KeyVault(SecretUri=${keyVault.properties.vaultUri}secrets/StorageAccountConnectionString)'
+                }
             ]
         }
         httpsOnly: true
