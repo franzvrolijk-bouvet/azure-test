@@ -231,3 +231,16 @@ resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
       }
     }
   }
+
+  resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
+    name: '${env}-apim'
+    location: resourceGroup().location
+    sku: {
+      name: 'Developer'
+      capacity: 1
+    }
+    properties: {
+      publisherEmail: 'franz.vrolijk@bouvet.no'
+      publisherName: 'Franz Vrolijk'
+    }
+  }
